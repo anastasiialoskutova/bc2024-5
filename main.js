@@ -19,6 +19,21 @@ if (!options.host || !options.port || !options.cache) {
   process.exit(1);
 }
 
+//GET /notes/<ім’я нотатки>
+app.get('/notes/:noteName', (req, res) => {
+  const notePath = path.join(options.cache, req.params.noteName);
+
+  if (!fs.existsSync(notePath)) {
+      return res.status(404).send('Not found');
+  }
+
+  const noteText = fs.readFileSync(notePath, 'utf8');
+  res.send(noteText);
+});
+
+
+
+
 console.log(`Host: ${options.host}\nPort: ${options.port}\nCache Directory: ${options.cache}`);
 
 // Створення HTTP сервера, передаючи в нього Express додаток
