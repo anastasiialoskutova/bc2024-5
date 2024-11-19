@@ -2,6 +2,8 @@ const express = require('express');
 const http = require('http');
 const { Command } = require('commander');
 const multer = require('multer');
+const path = require('path');
+const fs = require ('fs');
 
 const app = express();
 const program = new Command();
