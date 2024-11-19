@@ -31,6 +31,19 @@ app.get('/notes/:noteName', (req, res) => {
   res.send(noteText);
 });
 
+app.put('/notes/:noteName', (req, res) => {
+  const notePath = path.join(options.cache, req.params.noteName);
+  if (!fs.existsSync(notePath)) {
+      return res.status(404).send('Not found');
+  }
+  const newText = req.body.text;
+  if (newText === undefined) {
+      return res.status(400).send('Enter text');
+  }
+  fs.writeFileSync(notePath, newText);
+  res.send('Note updated');
+});
+
 
 
 
