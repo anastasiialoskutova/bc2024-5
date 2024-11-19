@@ -31,6 +31,7 @@ app.get('/notes/:noteName', (req, res) => {
   res.send(noteText);
 });
 
+//PUT /notes/<ім’я нотатки>
 app.put('/notes/:noteName', (req, res) => {
   const notePath = path.join(options.cache, req.params.noteName);
   if (!fs.existsSync(notePath)) {
@@ -44,7 +45,15 @@ app.put('/notes/:noteName', (req, res) => {
   res.send('Note updated');
 });
 
-
+//DELETE /notes/<ім’я нотатки>
+app.delete('/notes/:noteName', (req, res) => {
+  const notePath = path.join(options.cache, req.params.noteName);
+  if (!fs.existsSync(notePath)) {
+      return res.status(404).send('Not found');
+  }
+  fs.unlinkSync(notePath);
+  res.send('Note deleted');
+});
 
 
 console.log(`Host: ${options.host}\nPort: ${options.port}\nCache Directory: ${options.cache}`);
