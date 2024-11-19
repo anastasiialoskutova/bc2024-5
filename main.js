@@ -1,9 +1,11 @@
 const express = require('express');
 const http = require('http');
 const { Command } = require('commander');
+const multer = require('multer');
 
 const app = express();
 const program = new Command();
+const upload = multer();
 
 program
   .requiredOption('-h, --host <host>', 'адреса сервера')
@@ -57,14 +59,30 @@ app.delete('/notes/:noteName', (req, res) => {
 
 //GET /notes
 app.get('/notes', (req, res) => {
-  const files = fs.readdirSync(option.cache);
+  const files = fs.readdirSync(options.cache);
   const notes = files.map(fileName => {
-      const text = fs.readFileSync(path.join(option.cache, fileName), 'utf8');
+      const text = fs.readFileSync(path.join(options.cache, fileName), 'utf8');
       return { name: fileName, text };
   });
   res.json(notes);
 });
 
+//POST /write
+app.post('/write', upload.none(), (req, res) => {
+  const noteName = req.body.note_name;
+  const noteText = req.body.note;
+  const notePath = path.join(options.cache, noteName);
+  if (fs.existsSync(notePath)) {
+      return res.status(400).send('Note already exists');
+  }
+  try {
+      fs.writeFileSync(notePath, noteText);
+      res.status(201).send('Note created');
+  } catch (error) {
+      console.error('Error writing note:', error);
+      res.status(500).send('Error creating note');
+  }
+});
 
 console.log(`Host: ${options.host}\nPort: ${options.port}\nCache Directory: ${options.cache}`);
 
