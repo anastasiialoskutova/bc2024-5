@@ -55,6 +55,16 @@ app.delete('/notes/:noteName', (req, res) => {
   res.send('Note deleted');
 });
 
+//GET /notes
+app.get('/notes', (req, res) => {
+  const files = fs.readdirSync(option.cache);
+  const notes = files.map(fileName => {
+      const text = fs.readFileSync(path.join(option.cache, fileName), 'utf8');
+      return { name: fileName, text };
+  });
+  res.json(notes);
+});
+
 
 console.log(`Host: ${options.host}\nPort: ${options.port}\nCache Directory: ${options.cache}`);
 
