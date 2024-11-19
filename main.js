@@ -84,6 +84,11 @@ app.post('/write', upload.none(), (req, res) => {
   }
 });
 
+//GET /UploadForm.html
+app.get('/UploadForm.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'UploadForm.html'));
+});
+
 console.log(`Host: ${options.host}\nPort: ${options.port}\nCache Directory: ${options.cache}`);
 
 // Створення HTTP сервера, передаючи в нього Express додаток
