@@ -12,6 +12,7 @@ const upload = multer();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.text());  // Middleware для обробки raw тексту
 
 program
   .requiredOption('-h, --host <host>', 'адреса сервера')
@@ -45,7 +46,7 @@ app.put('/notes/:noteName', (req, res) => {
   if (!fs.existsSync(notePath)) {
       return res.status(404).send('Not found');
   }
-  const newText = req.body.text;
+  const newText = req.body;
   if (newText === undefined) {
       return res.status(400).send('Enter text');
   }
@@ -75,8 +76,8 @@ app.get('/notes', (req, res) => {
 
 //POST /write
 app.post('/write', upload.none(), (req, res) => {
-  const noteName = req.body.name;
-  const noteText = req.body.text;
+  const noteName = req.body.note_name;
+  const noteText = req.body.note;
   const notePath = path.join(options.cache, noteName);
   if (fs.existsSync(notePath)) {
       return res.status(400).send('Note already exists');

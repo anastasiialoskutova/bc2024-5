@@ -113,16 +113,16 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
+					"mode": "formdata",
+					"formdata": [
 						{
-							"key": "name",
-							"value": "note4.txt",
+							"key": "note_name",
+							"value": "mynewnote",
 							"type": "text"
 						},
 						{
-							"key": "text",
-							"value": "note from Postman",
+							"key": "note",
+							"value": "i dont know",
 							"type": "text"
 						}
 					]
