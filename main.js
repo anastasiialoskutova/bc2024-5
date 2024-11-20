@@ -4,10 +4,14 @@ const { Command } = require('commander');
 const multer = require('multer');
 const path = require('path');
 const fs = require ('fs');
+const bodyParser = require('body-parser');
 
 const app = express();
 const program = new Command();
 const upload = multer();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 program
   .requiredOption('-h, --host <host>', 'адреса сервера')
@@ -71,8 +75,8 @@ app.get('/notes', (req, res) => {
 
 //POST /write
 app.post('/write', upload.none(), (req, res) => {
-  const noteName = req.body.note_name;
-  const noteText = req.body.note;
+  const noteName = req.body.name;
+  const noteText = req.body.text;
   const notePath = path.join(options.cache, noteName);
   if (fs.existsSync(notePath)) {
       return res.status(400).send('Note already exists');
